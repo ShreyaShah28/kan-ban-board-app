@@ -1,137 +1,79 @@
 import { defineStore } from 'pinia'
-import axios from 'axios'
+import { api } from '../services/api'
 
 export const useTaskStore = defineStore('task', {
 
   state: () => ({
-    tasks: [],
-    status: [],
-    priority: [],
+    columns: [],
     addTaskModal: ''
   }),
 
   getters: {
-    getTaskId: () => Date.now()
+    getTaskId: () => Date.now().toString()
   },
 
   actions: {
 
-    getTasks() {
-      return new Promise((resolve, reject) => {
-        axios
-          .get('http://localhost:3000/tasks')
-          .then((response) => {
-            this.tasks = response.data
-            resolve(response)
-          })
-          .catch((err) => {
-            console.error(err)
-            reject(err)
-          })
-      })
-    },
-
-    getStatus(params: any = {}) {
-      return new Promise((resolve, reject) => {
-        axios
-          .get('http://localhost:3000/status', { params })
-          .then((response) => {
-            this.status = response.data
-            resolve(response)
-          })
-          .catch((err) => {
-            console.error(err)
-            reject(err)
-          })
-      })
-    },
-
-    getPriority(params: any = {}) {
-      return new Promise((resolve, reject) => {
-        axios
-          .get('http://localhost:3000/priority', { params })
-          .then((response) => {
-            this.priority = response.data
-            resolve(response)
-          })
-          .catch((err) => {
-            console.error(err)
-            reject(err)
-          })
-      })
+    getColumns() {
+      return api.get('/columns')
+        .then((res) => {
+          this.columns = res.data
+        })
+        .catch((error) => {
+          console.error('Error fetching columns:', error)
+        })
     },
 
     loadAllData() {
-      return Promise.all([
-        this.getTasks(),
-        this.getStatus(),
-        this.getPriority()
-      ])
+      return this.getColumns()
     },
 
     addTask(task: any) {
-      return new Promise((resolve, reject) => {
-        axios
-          .post('http://localhost:3000/tasks', {
-            id: Date.now().toString(),
-            text: task.name,
-            status: task.status,
-            priority: 'low'
-          })
-          .then((response) => {
-            this.tasks.push(response.data)
-            resolve(response)
-          })
-          .catch((err) => {
-            console.error(err)
-            reject(err)
-          })
-      })
+      const column = this.columns.find(
+        col => col.name === task.status
+      )
+
+      if (!column) return Promise.resolve()
+
+      const newTask = {
+        id: Date.now().toString(),
+        text: task.name,
+        priority: 'low',
+        order: column.tasks.length
+      }
+
+      column.tasks.push(newTask)
+
+      return api.put(`/columns/${column.id}`, column)
+        .catch((error) => {
+          console.error('Error adding task:', error)
+        })
     },
 
-    deleteTask(id: number) {
-      return new Promise((resolve, reject) => {
-        axios
-          .delete(`http://localhost:3000/tasks/${id}`)
-          .then((response) => {
-            this.tasks = this.tasks.filter(task => task.id !== id)
-            resolve(response)
-          })
-          .catch((err) => {
-            console.error(err)
-            reject(err)
-          })
+    deleteTask(taskId: string, column: any) {
+
+      column.tasks = column.tasks.filter(t => t.id !== taskId)
+
+      // Recalculate order
+      column.tasks.forEach((task, index) => {
+        task.order = index
       })
+
+      return api.put(`/columns/${column.id}`, column)
+        .catch((error) => {
+          console.error('Error deleting task:', error)
+        })
     },
-
-    updateTask(updatedTask: any) {
-      return new Promise((resolve, reject) => {
-
-        // Optimistic update
-        const index = this.tasks.findIndex(t => t.id === updatedTask.id)
-
-        if (index !== -1) {
-          this.tasks[index] = { ...updatedTask }
-        }
-
-        axios
-          .put(
-            `http://localhost:3000/tasks/${updatedTask.id}`,
-            updatedTask,
-            {
-              headers: {
-                "Content-Type": "application/json"
-              }
-            }
+    async saveAllColumns() {
+      try {
+        await Promise.all(
+          this.columns.map(column =>
+            api.put(`/columns/${column.id}`, column)
           )
-          .then((response) => {
-            resolve(response)
-          })
-          .catch((err) => {
-            console.error("Error updating task:", err)
-            reject(err)
-          })
-      })
+        )
+      } catch (error) {
+        console.error("Error saving columns:", error)
+      }
     },
 
     closeModal() {

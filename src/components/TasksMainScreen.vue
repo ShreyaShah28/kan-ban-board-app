@@ -13,10 +13,10 @@ const shadowColors = [
 ]
 </script>
 <template>
-  <div class="flex flex-row min-h-full">
+  <div class="flex flex-col lg:flex-row h-1/5 lg:min-h-full">
     <div
-      class="w-1/5 p-5 min-h-full group"
-      v-for="(value, index) in taskStore.status"
+      class="max-w-full lg:min-w-1/5 p-5 max-h-1/5 group"
+      v-for="(value, index) in taskStore.columns"
       :key="value.name"
       :class="{
         'active-column': taskStore.addTaskModal === value.name,
@@ -43,7 +43,7 @@ const shadowColors = [
         v-if="taskStore.addTaskModal !== ''"
         @close="taskStore.addTaskModal = ''"
       />
-      <StatusTask class="w-full min-h-11/12" :status="value.name" />
+      <StatusTask class="min-w-11/12 lg:w-full" :column="value" />
     </div>
   </div>
 </template>

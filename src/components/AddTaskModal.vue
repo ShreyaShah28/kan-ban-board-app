@@ -36,6 +36,7 @@ function addTask() {
   }
 
   v$.value.$reset()
+  formData.name = ''
 }
 
 document.addEventListener('keydown', (e) => {
