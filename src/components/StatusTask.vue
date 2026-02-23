@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
 import { useTaskStore } from '../taskStore/taskStore'
 import draggable from 'vuedraggable'
 
@@ -10,7 +9,6 @@ const props = defineProps({
     required: true,
   },
 })
-const isDraggingOver = ref(false)
 
 function taskDate(dateId: string) {
   return new Date(parseInt(dateId)).toLocaleDateString()
@@ -20,14 +18,7 @@ function handleChange() {
 }
 </script>
 <template>
-  <div
-    class="w-full"
-    :class="[
-      isDraggingOver
-        ? 'border-gray-400 border-2'
-        : 'border-gray-100 dark:border-gray-800 border-none',
-    ]"
-  >
+  <div class="w-full">
     <draggable
       v-model="props.column.tasks"
       group="tasks"
