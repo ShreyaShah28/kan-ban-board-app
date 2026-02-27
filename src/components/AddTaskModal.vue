@@ -75,13 +75,13 @@ watch(
 <template>
   <div
     @click="taskStore.closeModal"
-    class="flex flex-col items-center fixed z-10 left-0 top-0 w-full h-full bg-gray-100/20 dark:bg-gray-800/20 overflow-auto"
+    class="flex flex-col items-center fixed z-10 left-0 top-0 w-full h-full bg-gray-500/25 dark:bg-gray-800/20 overflow-auto"
   >
     <div
       @click.stop
-      class="gap-3 flex flex-col items-center bg-gray-300 dark:bg-gray-900 rounded-xl w-full h-fit mt-[10%] sm:w-2/3 md:w-1/2 lg:w-1/3"
+      class="gap-3 flex flex-col items-center bg-blue-50 border border-white dark:bg-gray-900 rounded-xl w-full h-fit mt-[10%] sm:w-2/3 md:w-1/2 lg:w-1/3"
     >
-      <div class="flex justify-between w-full p-5 border-b border-gray-500">
+      <div class="flex justify-between w-full p-5 border-b border-gray-500/50">
         <p class="text-2xl font-medium text-gray-700 dark:text-gray-300 italic">
           {{ taskStore.updateTaskModal ? 'Update Task' : 'Add New Task' }}
         </p>
@@ -117,12 +117,12 @@ watch(
       </div>
       <div class="flex flex-col w-full h-fit p-5 gap-1">
         <p class="text-xl mb-1 italic">Task</p>
-        <span class="w-full overflow-hidden rounded-xl">
+        <span class="w-full">
           <textarea
             placeholder="Enter New Task"
             @blur="v$.text.$touch()"
             v-model="formData.text"
-            class="text-xl bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 p-4 w-full border-none outline-none focus:outline-none rounded-md"
+            class="text-xl bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 p-4 w-full overflow-clip border border-blue-400 outline-none focus:outline-none rounded-xl"
           />
           <p v-if="v$.text.$error" class="text-red-600 text-lg">
             <span v-for="err in v$.text.$errors" :key="err.$uid">
@@ -132,11 +132,11 @@ watch(
           <br />
         </span>
       </div>
-      <div class="flex justify-end w-full pr-5 pb-2 py-2 border-t border-gray-500">
+      <div class="flex justify-end w-full pr-5 pb-2 py-2 border-t border-gray-500/50">
         <button
           type="button"
           @click="addTask"
-          class="text-xl bg-gray-500 text-white p-2 rounded-md hover:bg-gray-600 h-min"
+          class="text-xl bg-sky-700 text-white p-2 px-4 rounded-md hover:bg-sky-600 h-min"
         >
           {{ taskStore.updateTaskModal ? 'Update' : 'Add' }}
         </button>
