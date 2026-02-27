@@ -4,28 +4,28 @@
       "name": "In progress",
       "tasks": [
         {
-          "id": "1417010450615",
-          "text": "Update User Profile Page UI",
-          "priority": "Urgent",
-          "order": 1
-        },
-        {
           "id": "1708603329987",
           "text": "Implement Email Notification System",
+          "username": "Sunil Patel",
+          "status": "In progress",
           "priority": "High",
           "order": 1
         },
         {
-          "id": "1771589064841",
-          "text": "sdhzfgdshjfg",
-          "priority": "low",
+          "id": "1708855731196",
+          "text": "Create Onboarding Tutorial for New Users",
+          "username": "Shankar Kumar",
+          "status": "In progress",
+          "priority": "Medium",
           "order": 2
         },
         {
-          "id": "1771589782855",
-          "text": "From Done",
+          "id": "1772114447779",
+          "text": "New Task Under backlog",
+          "username": "Sunil Patel",
+          "status": "Backlog",
           "priority": "low",
-          "order": 0
+          "order": 3
         }
       ],
       "id": "2d49"
@@ -34,27 +34,27 @@
       "name": "Backlog",
       "tasks": [
         {
-          "id": "1771833464010",
-          "text": "From Backlog",
-          "priority": "low",
-          "order": 3
-        },
-        {
-          "id": "1771589774887",
-          "text": "from Todo",
-          "priority": "low",
-          "order": 1
-        },
-        {
-          "id": "1771594660345",
-          "text": "hello",
-          "priority": "low",
-          "order": 4
+          "id": "1708771594208",
+          "text": "Third-Party Payment Gateway",
+          "username": "Ramesh",
+          "status": "Backlog",
+          "priority": "Low",
+          "order": 0
         },
         {
           "id": "1708421798456",
-          "text": "Add Multi-Language Support - Enable multi-language support within the application.",
+          "text": "Add Multi-Language Support ",
+          "username": "Anil Sharma",
+          "status": "Todo",
           "priority": "High",
+          "order": 0
+        },
+        {
+          "id": "1772012409188",
+          "text": "new task with username",
+          "username": "Mehta Suresh",
+          "status": "Backlog",
+          "priority": "low",
           "order": 1
         }
       ],
@@ -64,27 +64,19 @@
       "name": "Todo",
       "tasks": [
         {
-          "id": "1771589791998",
-          "text": "From Cancelled",
+          "id": "1772022374256",
+          "text": "Enable multi-language support within application.",
+          "username": "Ramesh",
+          "status": "Todo",
           "priority": "low",
-          "order": 3
+          "order": 1
         },
         {
-          "id": "1771671291292",
-          "text": "My KanBan App Ui updates",
-          "priority": "low",
-          "order": 0
-        },
-        {
-          "id": "1708771594208",
-          "text": "Third-Party Payment Gateway",
-          "priority": "Low",
-          "order": 2
-        },
-        {
-          "id": "1771588887175",
-          "text": "from delete",
-          "priority": "low",
+          "id": "1708687415561",
+          "text": "Enhance Search Functionality",
+          "username": "Ramesh",
+          "status": "Todo",
+          "priority": "No priority",
           "order": 2
         }
       ],
@@ -96,20 +88,18 @@
         {
           "id": "1708939824475",
           "text": "Implement Role-Based Access Control (RBAC)",
+          "username": "Sunil Patel",
+          "status": "Done",
           "priority": "High",
-          "order": 3
+          "order": 0
         },
         {
           "id": "1709108206129",
           "text": "Conduct Security Vulnerability Assessment",
+          "username": "Mehta Suresh",
+          "status": "Done",
           "priority": "Low",
-          "order": 0
-        },
-        {
-          "id": "1708687415561",
-          "text": "Enhance Search Functionality",
-          "priority": "No priority",
-          "order": 2
+          "order": 1
         }
       ],
       "id": "3d61"
@@ -120,29 +110,51 @@
         {
           "id": "1709024019302",
           "text": "Upgrade Server Infrastructure",
+          "username": "Sunil Patel",
+          "status": "Cancelled",
           "priority": "Medium",
           "order": 0
-        },
-        {
-          "id": "1771587540899",
-          "text": "from cancelled",
-          "priority": "low",
-          "order": 1
         },
         {
           "id": "1708519230142",
           "text": "Optimize Database Queries for Performance",
+          "username": "Ramesh",
+          "status": "Cancelled",
           "priority": "Low",
-          "order": 0
+          "order": 1
         },
         {
-          "id": "1708855731196",
-          "text": "Create Onboarding Tutorial for New Users",
-          "priority": "Medium",
-          "order": 3
+          "id": "1417010450615",
+          "text": "Update User Profile Page UI",
+          "username": "Anil Sharma",
+          "status": "In progress",
+          "priority": "Urgent",
+          "order": 0
         }
       ],
       "id": "0a16"
+    }
+  ],
+  "users": [
+    {
+      "name": "Anil Sharma",
+      "id": "4bc8"
+    },
+    {
+      "name": "Sunil Patel",
+      "id": "11d6"
+    },
+    {
+      "name": "Shankar Kumar",
+      "id": "1b53"
+    },
+    {
+      "name": "Ramesh",
+      "id": "49ef"
+    },
+    {
+      "name": "Mehta Suresh",
+      "id": "c3df"
     }
   ]
 }

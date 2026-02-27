@@ -3,25 +3,32 @@ import { useTaskStore } from '../taskStore/taskStore'
 import { computed, reactive } from 'vue'
 import useVuelidate from '@vuelidate/core'
 import { helpers, required, maxLength } from '@vuelidate/validators'
+import { watch } from 'vue'
 
 const initialData = {
-  name: '',
+  username: '',
+  text: '',
   status: '',
 }
 const taskStore = useTaskStore()
 const formData = reactive({ ...initialData })
 
 const rules = computed(() => ({
-  name: {
+  text: {
     required: helpers.withMessage('* Please enter some text', required),
-    maxLength: helpers.withMessage('* Character limit is 25', maxLength(50)),
+    maxLength: helpers.withMessage('* Character limit is 50', maxLength(50)),
+  },
+  username: {
+    required: helpers.withMessage('* Please enter some text', required),
   },
 }))
 
 const v$ = useVuelidate(rules, formData)
 
-function addTask() {
+async function addTask() {
   v$.value.$touch()
+  console.log('addtaskmodal: ', taskStore.addTaskModal)
+  console.log('updatetaskmodal: ', taskStore.updateTaskModal)
 
   if (v$.value.$invalid) return
 
@@ -29,14 +36,20 @@ function addTask() {
     formData.status = taskStore.addTaskModal
     taskStore.addTask(formData)
     taskStore.addTaskModal = ''
-  } else {
-    // formData.date = new Date(formData.date).toISOString()
-    // taskStore.updateTask(taskStore.editCurrentTask, formData)
-    // taskStore.editCurrentTask = 0
+  } else if (taskStore.updateTaskModal !== '') {
+    formData.status = taskStore.updateTaskModal
+    await taskStore.updateTask({
+      id: taskStore.taskToUpdate.id,
+      username: formData.username,
+      text: formData.text,
+      status: formData.status,
+    })
+    taskStore.updateTaskModal = ''
+    console.log('from updatetask section end')
   }
 
   v$.value.$reset()
-  formData.name = ''
+  formData.text = ''
 }
 
 document.addEventListener('keydown', (e) => {
@@ -46,6 +59,18 @@ document.addEventListener('keydown', (e) => {
     taskStore.closeModal()
   }
 })
+
+watch(
+  () => taskStore.updateTaskModal,
+  (newVal) => {
+    if (newVal !== '') {
+      formData.username = taskStore.taskToUpdate.username
+      formData.text = taskStore.taskToUpdate.text
+      formData.status = taskStore.taskToUpdate.status
+    }
+  },
+  { immediate: true }
+)
 </script>
 <template>
   <div
@@ -54,27 +79,53 @@ document.addEventListener('keydown', (e) => {
   >
     <div
       @click.stop
-      class="gap-3 flex flex-col items-center bg-gray-300 dark:bg-gray-900 rounded-xl w-full h-fit mt-[15%] sm:w-2/3 md:w-1/2 lg:w-1/3"
+      class="gap-3 flex flex-col items-center bg-gray-300 dark:bg-gray-900 rounded-xl w-full h-fit mt-[10%] sm:w-2/3 md:w-1/2 lg:w-1/3"
     >
       <div class="flex justify-between w-full p-5 border-b border-gray-500">
         <p class="text-2xl font-medium text-gray-700 dark:text-gray-300 italic">
-          Add New Task
+          {{ taskStore.updateTaskModal ? 'Update Task' : 'Add New Task' }}
         </p>
         <button type="button" @click="taskStore.closeModal" class="">
           <span class="text-2xl">&times;</span>
         </button>
       </div>
+      <div class="flex flex-col w-full h-fit p-5 pb-0 gap-1">
+        <span class="w-full overflow-hidden rounded-xl">
+          <fieldset>
+            <legend class="pb-3 text-xl italic">Select user to assign task</legend>
+            <div class="grid grid-cols-3 gap-3">
+              <div v-for="username in taskStore.users" :key="username">
+                <input
+                  type="radio"
+                  id="username1"
+                  name="user"
+                  value="username.name"
+                  @change="formData.username = username.name"
+                  :checked="formData.username === username.name"
+                />
+                <label for="username1">{{ username.name }}</label>
+              </div>
+            </div>
+          </fieldset>
+          <p v-if="v$.username.$error" class="text-red-600 text-lg">
+            <span v-for="err in v$.username.$errors" :key="err.$uid">
+              {{ err.$message }}
+            </span>
+          </p>
+          <br />
+        </span>
+      </div>
       <div class="flex flex-col w-full h-fit p-5 gap-1">
-        <p class="text-xl mb-1">Task</p>
-        <span class="w-full bg-gray-300 dark:bg-gray-700 overflow-hidden rounded-xl">
+        <p class="text-xl mb-1 italic">Task</p>
+        <span class="w-full overflow-hidden rounded-xl">
           <textarea
             placeholder="Enter New Task"
-            @blur="v$.name.$touch()"
-            v-model="formData.name"
+            @blur="v$.text.$touch()"
+            v-model="formData.text"
             class="text-xl bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 p-4 w-full border-none outline-none focus:outline-none rounded-md"
           />
-          <p v-if="v$.name.$error" class="text-red-600 text-lg">
-            <span v-for="err in v$.name.$errors" :key="err.$uid">
+          <p v-if="v$.text.$error" class="text-red-600 text-lg">
+            <span v-for="err in v$.text.$errors" :key="err.$uid">
               {{ err.$message }}
             </span>
           </p>
@@ -85,9 +136,9 @@ document.addEventListener('keydown', (e) => {
         <button
           type="button"
           @click="addTask"
-          class="text-2xl bg-gray-500 text-white p-3 rounded-md hover:bg-gray-600 h-min"
+          class="text-xl bg-gray-500 text-white p-2 rounded-md hover:bg-gray-600 h-min"
         >
-          Add
+          {{ taskStore.updateTaskModal ? 'Update' : 'Add' }}
         </button>
       </div>
     </div>

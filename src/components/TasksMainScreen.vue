@@ -5,11 +5,11 @@ import AddTaskModal from './AddTaskModal.vue'
 
 const taskStore = useTaskStore()
 const shadowColors = [
-  'shadow-blue-200',
-  'shadow-sky-200',
-  'shadow-yellow-200',
-  'shadow-green-200',
-  'shadow-red-200',
+  'shadow-blue-200 dark:shadow-blue-200',
+  'shadow-sky-200 dark:shadow-sky-200',
+  'shadow-yellow-200 dark:shadow-yellow-200',
+  'shadow-green-200 dark:shadow-green-200',
+  'shadow-red-200 dark:shadow-red-200',
 ]
 </script>
 <template>
@@ -23,7 +23,7 @@ const shadowColors = [
       }"
     >
       <div
-        class="flex flex-row justify-between bg-white dark:bg-gray-700 rounded-2xl p-3 group-hover:ring-2 group-hover:ring-gray-400 transition-all duration-200 shadow-md"
+        class="flex flex-row justify-between bg-white dark:bg-gray-700 rounded-2xl p-3 group-hover:ring-2 group-hover:ring-gray-700 transition-all duration-200 shadow-md"
         :class="[
           shadowColors[index % shadowColors.length],
           {
@@ -40,8 +40,8 @@ const shadowColors = [
         </button>
       </div>
       <AddTaskModal
-        v-if="taskStore.addTaskModal !== ''"
-        @close="taskStore.addTaskModal = ''"
+        v-if="taskStore.addTaskModal !== '' || taskStore.updateTaskModal !== ''"
+        @close="taskStore.closeModal"
       />
       <StatusTask class="min-w-11/12 lg:w-full" :column="value" />
     </div>
